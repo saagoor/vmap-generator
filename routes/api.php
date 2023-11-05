@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('v1')
+Route::prefix('/v1')
     ->name('api.')
     ->group(function () {
         Route::get('/vmaps/{vmap}.xml', [VmapsController::class, 'show'])->name('vmaps.show');

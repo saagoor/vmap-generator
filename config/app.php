@@ -57,6 +57,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'route_prefix' => env('APP_ROUTE_PREFIX', 'vmaps'),
+
     'asset_url' => env('ASSET_URL'),
 
     /*
