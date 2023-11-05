@@ -25,6 +25,8 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
+            ->spa()
+            ->maxContentWidth('full')
             ->path(config('app.route_prefix') . '/admin')
             ->login()
             ->colors([

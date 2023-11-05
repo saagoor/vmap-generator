@@ -15,11 +15,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('vmap_id');
             $table->text('vast_url');
+            $table->enum('category', ['preroll', 'midroll', 'postroll']);
             $table->string('time_offset')->nullable();
             $table->string('break_type')->default('linear');
             $table->string('repeat_after')->nullable();
-            $table->boolean('is_pre_roll')->default(false);
-            $table->boolean('is_post_roll')->default(false);
             $table->timestamps();
         });
     }

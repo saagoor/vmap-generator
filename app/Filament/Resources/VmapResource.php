@@ -7,8 +7,8 @@ use App\Models\Vmap;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -31,31 +31,35 @@ class VmapResource extends Resource
                     ->columnSpanFull(),
                 Repeater::make('adBreaks')
                     ->relationship('adBreaks')
+                    ->addActionLabel('Add ad break')
+                    ->cloneable()
                     ->schema([
                         TextInput::make('vast_url')
                             ->required()
                             ->url()
                             ->placeholder('https://example.com/vast.xml')
                             ->columnSpan(2),
-                        Select::make('break_type')
+                        Select::make('category')
+                            ->label('Type')
+                            ->required()
                             ->options([
-                                'linear' => 'Video (linear)',
-                                'nonlinear' => 'Overlay (non-linear)',
+                                'preroll' => 'Preroll',
+                                'midroll' => 'Midroll',
+                                'postroll' => 'Postroll',
                             ])
-                            ->default('linear')
-                            ->required(),
+                            ->default('preroll')
+                            ->live(),
                         TextInput::make('time_offset')
                             ->placeholder('Seconds')
-                            ->numeric(),
-                        TextInput::make('repeat_after')
                             ->numeric()
-                            ->placeholder('Seconds'),
-                        Toggle::make('is_pre_roll')
-                            ->label('Pre-roll')
-                            ->default(false),
-                        Toggle::make('is_post_roll')
-                            ->label('Post-roll')
-                            ->default(false),
+                            ->requiredIf('category', 'midroll')
+                            ->minValue(60)
+                            ->hidden(fn (Get $get): bool => $get('category') !== 'midroll'),
+                        TextInput::make('repeat_after')
+                            ->placeholder('Seconds')
+                            ->numeric()
+                            ->minValue(60)
+                            ->hidden(fn (Get $get): bool => $get('category') !== 'midroll'),
                     ])
                     ->columns(5)
                     ->columnSpanFull(),

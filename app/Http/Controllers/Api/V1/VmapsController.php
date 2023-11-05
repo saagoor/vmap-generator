@@ -26,48 +26,48 @@ class VmapsController extends Controller
 
         $midrollCount = 0;
         foreach ($vmap->adBreaks as $adBreak) {
-            if ($adBreak->is_pre_roll) {
+            if ($adBreak->category === 'preroll') {
                 $prerolls[] = [
                     'id' => 'preroll-' . count($prerolls) + 1,
                     'vast_url' => $adBreak->vast_url,
                     'break_type' => $adBreak->break_type ?? 'linear',
                 ];
-            }
-            if ($adBreak->is_post_roll) {
+            }else if ($adBreak->category === 'postroll') {
                 $postrolls[] = [
                     'id' => 'postroll-' . count($postrolls) + 1,
                     'vast_url' => $adBreak->vast_url,
                     'break_type' => $adBreak->break_type ?? 'linear',
                 ];
-            }
-            if ($adBreak->time_offset > 0) {
-                $midrolls[] = [
-                    'id' => 'midroll-' . $midrollCount . 1 . '-ad-1',
-                    'vast_url' => $adBreak->vast_url,
-                    'break_type' => $adBreak->break_type ?? 'linear',
-                    'time_offset' => gmdate('H:i:s', $adBreak->time_offset),
-                    'time_offset_seconds' => $adBreak->time_offset,
-                ];
-            }
-            if ($adBreak->repeat_after > 0) {
-                $adCount = 0;
-                for (
-                    $time_offset = ($adBreak->time_offset + $adBreak->repeat_after);
-                    $time_offset <= $duration;
-                    $time_offset += $adBreak->repeat_after
-                ) {
+            }else{
+                if ($adBreak->time_offset > 0) {
                     $midrolls[] = [
-                        'id' => 'midroll-' . $midrollCount . 1 . '-ad-' . $adCount + 1,
+                        'id' => 'midroll-' . $midrollCount . 1 . '-ad-1',
                         'vast_url' => $adBreak->vast_url,
                         'break_type' => $adBreak->break_type ?? 'linear',
-                        'time_offset' => gmdate('H:i:s', $time_offset),
-                        'time_offset_seconds' => $time_offset,
+                        'time_offset' => gmdate('H:i:s', $adBreak->time_offset),
+                        'time_offset_seconds' => $adBreak->time_offset,
                     ];
-                    $adCount++;
                 }
-            }
-            if ($adBreak->time_offset > 0 || $adBreak->repeat_after > 0) {
-                $midrollCount++;
+                if ($adBreak->repeat_after > 0) {
+                    $adCount = 0;
+                    for (
+                        $time_offset = ($adBreak->time_offset + $adBreak->repeat_after);
+                        $time_offset <= $duration;
+                        $time_offset += $adBreak->repeat_after
+                    ) {
+                        $midrolls[] = [
+                            'id' => 'midroll-' . $midrollCount . 1 . '-ad-' . $adCount + 1,
+                            'vast_url' => $adBreak->vast_url,
+                            'break_type' => $adBreak->break_type ?? 'linear',
+                            'time_offset' => gmdate('H:i:s', $time_offset),
+                            'time_offset_seconds' => $time_offset,
+                        ];
+                        $adCount++;
+                    }
+                }
+                if ($adBreak->time_offset > 0 || $adBreak->repeat_after > 0) {
+                    $midrollCount++;
+                }
             }
         }
 

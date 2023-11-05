@@ -13,6 +13,11 @@ class Vmap extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'time_offset' => 'integer',
+        'repeat_after' => 'integer',
+    ];
+
     public function adBreaks()
     {
         return $this->hasMany(VmapAdBreak::class);
