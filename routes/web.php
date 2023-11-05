@@ -14,3 +14,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::redirect('/', config('app.route_prefix') . '/admin');
+Route::redirect(config('app.route_prefix'), config('app.route_prefix') . '/admin');
