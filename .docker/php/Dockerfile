@@ -52,4 +52,6 @@ RUN php artisan optimize
 # RUN npm install
 # RUN npm run build
 
+RUN chown -R www-data:www-data ./
+
 EXPOSE 5173
