@@ -8,7 +8,7 @@ COPY .docker/php/.bashrc /root/
 
 RUN apt-get update
 RUN apt-get install -y build-essential zlib1g-dev default-mysql-client curl gnupg procps vim git unzip libzip-dev libpq-dev
-RUN docker-php-ext-install zip pdo_mysql pdo_pgsql pgsql
+RUN docker-php-ext-install zip pdo_mysql
 
 RUN apt-get install -y libicu-dev
 RUN docker-php-ext-configure intl
@@ -51,7 +51,5 @@ RUN php artisan optimize
 
 # RUN npm install
 # RUN npm run build
-
-RUN chown -R www-data:www-data ./
 
 EXPOSE 5173
