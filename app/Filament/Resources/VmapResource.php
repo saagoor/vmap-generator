@@ -72,11 +72,18 @@ class VmapResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('url')
+                    ->copyable()
+                    ->tooltip('Click to copy url')
+                    ->state(function (Vmap $record): string {
+                        return route('api.vmaps.show', $record);
+                    }),
                 Tables\Columns\TextColumn::make('ad_breaks_count')
-                    ->label('Ad Breaks')
+                    ->label('Vast')
                     ->counts('adBreaks')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
