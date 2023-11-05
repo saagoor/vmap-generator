@@ -1,8 +1,10 @@
 FROM php:8.2-fpm
 
-COPY php.ini /usr/local/etc/php/
-COPY docker.conf /usr/local/etc/php-fpm.d/docker.conf
-COPY .bashrc /root/
+WORKDIR /var/www
+
+COPY .docker/php/php.ini /usr/local/etc/php/
+COPY .docker/php/docker.conf /usr/local/etc/php-fpm.d/docker.conf
+COPY .docker/php/.bashrc /root/
 
 RUN apt-get update
 RUN apt-get install -y build-essential zlib1g-dev default-mysql-client curl gnupg procps vim git unzip libzip-dev libpq-dev
@@ -38,10 +40,16 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /composer
 ENV PATH $PATH:/composer/vendor/bin
 RUN composer config --global process-timeout 3600
-RUN composer global require "laravel/installer"
 
-WORKDIR /root
-COPY ../ ./
+COPY . .
+
+# Install dependencies
+# RUN composer install --no-scripts --no-interaction --no-progress --prefer-dist --optimize-autoloader
+RUN composer install --optimize-autoloader --no-dev
+RUN php artisan optimize:clear
+RUN php artisan optimize
+
+# RUN npm install
+# RUN npm run build
 
 EXPOSE 5173
-WORKDIR /var/www
