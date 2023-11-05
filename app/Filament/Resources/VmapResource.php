@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\VmapResource\Pages;
 use App\Models\Vmap;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -19,14 +18,6 @@ class VmapResource extends Resource
     protected static ?string $model = Vmap::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    protected function getMessages(): array
-    {
-        return [
-            'data.name.min' => __('VMAPs'),
-            'data.adBreaks.*.time_offset.required_without_all' => __('Required for midroll.'),
-        ];
-    }
 
     public static function form(Form $form): Form
     {
@@ -55,7 +46,6 @@ class VmapResource extends Resource
                             ->required(),
                         TextInput::make('time_offset')
                             ->placeholder('Seconds')
-                            ->rules(['required_without_all:is_pre_roll,is_post_roll'])
                             ->numeric(),
                         TextInput::make('repeat_after')
                             ->numeric()
