@@ -7,6 +7,7 @@ echo "🎉 Deploying application..."
 (git restore .) && (git clean -f -d)
 git fetch && git rebase
 
-docker compose restart --build
+docker compose build
+docker compose restart
 
 echo "🚀 Deployment successfull!"
