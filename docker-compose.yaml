@@ -3,6 +3,7 @@ version: "3"
 services:
   php:
     container_name: vmap_generator_php
+    restart: always
     build:
       context: .
       dockerfile: .docker/php/Dockerfile
@@ -16,6 +17,7 @@ services:
   nginx:
     container_name: vmap_generator_nginx
     image: nginx
+    restart: always
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
